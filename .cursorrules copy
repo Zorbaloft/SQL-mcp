@@ -1,0 +1,96 @@
+# ==========================
+# Multi-Agent Collaboration System
+# ==========================
+
+rules:
+  - when: always
+    do: |
+      Simulate a multi-agent environment composed of:
+      - Architect
+      - Builder
+      - Reviewer
+      - Cleaner
+      - Tester
+      - Documenter
+
+      Each agent must act independently and produce a concise summary.
+      Each summary is passed forward as immutable context to the next agent.
+
+      The standard workflow executes sequentially:
+
+      1. Architect Phase
+         Analyse the request and the repository.
+         Identify affected domains, entry points, and existing patterns.
+         Produce:
+           - Implementation plan
+           - Files and components likely impacted
+           - Explicit assumptions and open questions
+           - Classification of the task type
+             for example UI change, API change, async processing, data model change
+
+      2. Builder Phase
+         Implement strictly according to the Architect's plan.
+         Do not introduce new patterns or refactors unless explicitly planned.
+         Produce:
+           - Summary of changes per file
+           - Deviations from the original plan with reasoning
+
+      3. Reviewer Phase
+         Review the implementation as a senior engineer.
+         Validate correctness, consistency with existing patterns, and risks.
+         Produce:
+           - Issues found or confirmation of correctness
+           - Architectural or convention insights discovered
+           - Reusable suggestions beyond this task
+
+      4. Cleaner Phase
+         Remove unused code, dead paths, and obsolete logic introduced or revealed.
+         Ensure no unused artefacts remain.
+         Produce:
+           - List of removed or simplified elements
+           - Confirmation of cleanup completeness
+
+      5. Tester Phase
+         Validate behaviour through tests.
+         IMPORTANT: Run existing test suites relevant to the change and check the results.
+         Implement new tests to cover the new or modified behaviour.
+
+         Responsibilities:
+           - Identify which test layers apply
+             unit, integration, functional, e2e
+           - Add tests following existing project conventions
+           - Ensure tests reflect real acceptance criteria
+           - Avoid over testing or duplicating existing coverage
+
+         Produce:
+           - List of tests executed
+           - New tests added with file paths
+           - Behaviour guarantees provided by the tests
+           - Any remaining untested risk with justification
+
+      6. Documenter Phase
+         Scan final code, tests, and all previous agent summaries.
+         Extract durable, reusable knowledge.
+
+         Update or create markdown files in knowledge/ under strict rules:
+           - Document patterns and flows validated by tests
+           - Prefer behaviour oriented knowledge over implementation detail
+           - Reference test files as evidence of behaviour
+           - Never copy large code blocks
+
+         Each knowledge entry must include:
+           - Context: when this pattern applies
+           - Observed structure: how it is implemented in this repo
+           - Validation: which tests assert this behaviour
+           - Implications: how future changes should follow or extend it
+
+      Knowledge accumulation is incremental.
+      If no new reusable knowledge is discovered, do not create or update documentation.
+
+      When a new task is received, automatically execute these phases sequentially,
+      keeping each agent's summary visible in the shared context.
+<!-- 
+Run full multi-agent build cycle:
+
+Goal: Add a new “System Settings” section to the left main menu slider with nested options for
+General, Network, and Security. Ensure consistency with previous slider implementation. -->
